@@ -1,0 +1,485 @@
+openapi: 3.0.0
+info:
+  title: AuthorizationServerAgentAPI Service
+  version: "1"
+servers:
+- url: http://portal.akanacompose:9900/oauth/auzserveragent
+- url: https://portal.akanacompose:9901/oauth/auzserveragent
+paths:
+  /providers/oauth/authtoken:
+    get:
+      operationId: getToken
+      parameters:
+      - name: tokenId
+        in: query
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /providers/oauth/authtoken/invalidate:
+    post:
+      operationId: invalidateAuthToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tokenId: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /providers/oauth/authtokens/active:
+    get:
+      operationId: loadValidAuthTokens
+      responses:
+        default:
+          description: ""
+          content:
+            application/json: {}
+  /providers/oauth/authtokens/inactive:
+    get:
+      operationId: loadInvalidAuthTokens
+      responses:
+        default:
+          description: ""
+          content:
+            application/json: {}
+  /providers/oauth/authtokens/removeexpired:
+    post:
+      operationId: removeExpiredTokens
+      responses:
+        default:
+          description: ""
+          content:
+            application/json: {}
+  /providers/oauth/{OAuthProviderDomainID}/authtoken:
+    post:
+      operationId: createAuthTokenForUser
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tokenId: {}
+                userQname: {}
+                expTime: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /providers/{OAuthProviderDomainID}/authenticate:
+    post:
+      operationId: authenticateGrantResourceOwner
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            text/plain:
+              schema:
+                type: string
+  /providers/{OAuthProviderDomainID}/grants/accesstokens/oauth10a:
+    post:
+      operationId: createOAuth10AccessTokenUsingTokenVerifier
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                oauth_verifier: {}
+                oauth_token: {}
+                scope: {}
+                client_id: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/accesstokens/oauth20:
+    post:
+      operationId: createOAuth20AccessToken
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/oauth20:
+    post:
+      operationId: createOAuth20Grant
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type: {}
+                azp: {}
+                grant_id: {}
+                scope: {}
+                response_type: {}
+                redirect_uri: {}
+                state: {}
+                nonce: {}
+                client_id: {}
+                username: {}
+                response_mode: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/requesttokens/oauth10a/{Token}:
+    get:
+      operationId: getOAuth10TemporaryTokenCredentials
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Token
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Verifier
+        in: query
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}:
+    get:
+      operationId: getGrant
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: IncludeToken
+        in: query
+        schema:
+          type: boolean
+      - name: IncludeResourceOwnerUserInfo
+        in: query
+        schema:
+          type: boolean
+      - name: IncludeIDToken
+        in: query
+        schema:
+          type: boolean
+      - name: IncludeGrantProperties
+        in: query
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}/actions:
+    post:
+      operationId: executeWorkflowAction
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/xml: {}
+          application/json: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}/authinstructions:
+    put:
+      operationId: recordResourceOwnerAuthenticationInstructions
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/xml: {}
+          application/json: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}/auz/result:
+    put:
+      operationId: recordResourceOwnerAuthorizationPUT
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}/auzresult:
+    put:
+      operationId: recordResourceOwnerAuthorization
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                Authorized: {}
+                scope: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}/details:
+    get:
+      operationId: getGrantDetails
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/grants/{GrantID}/resourceowner:
+    put:
+      operationId: recordResourceOwnerAuthentication
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: GrantID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: CompleteAuzUsingOtherGrants
+        in: query
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/xml: {}
+          application/json: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/jwks:
+    get:
+      operationId: getPublicJwkSetJson
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: string
+  /providers/{OAuthProviderDomainID}/oauth/grants:
+    get:
+      operationId: findGrant
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AccessToken
+        in: query
+        schema:
+          type: string
+      - name: ServiceQName
+        in: query
+        schema:
+          type: string
+      - name: client_id
+        in: query
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/oauth10/grants/oauth10a:
+    post:
+      operationId: initiateGrantRequest
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                scope: {}
+                redirect_uri: {}
+                client_id: {}
+      responses:
+        default:
+          description: ""
+          content:
+            application/xml: {}
+            application/json: {}
+  /providers/{OAuthProviderDomainID}/resources/{Resource}:
+    get:
+      operationId: getOAuthProviderResource
+      parameters:
+      - name: OAuthProviderDomainID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: Resource
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: ""
+          content:
+            image/jpeg:
+              schema:
+                type: byte
+components: {}
